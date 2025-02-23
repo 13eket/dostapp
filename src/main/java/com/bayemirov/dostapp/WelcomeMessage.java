@@ -1,3 +1,5 @@
+package com.bayemirov.dostapp;
+
 import org.springframework.stereotype.Component;
 
 @Component
