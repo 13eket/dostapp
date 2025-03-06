@@ -18,7 +18,7 @@ public class DostappApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DostappApplication.class, args);
-		log.info("Something changed! beket");
+		log.info("Started application!");
 	}
 
 	@Bean

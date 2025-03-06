@@ -1,0 +1,9 @@
+# Ignore Gradle cache and build artifacts
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Ignore IntelliJ IDEA project files
+.idea/
+
+# Ignore build outputs
+build/
