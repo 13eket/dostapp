@@ -1,32 +1,24 @@
 package com.bayemirov.dostapp.run;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
-import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.data.repository.ListCrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-@Repository
-public class RunRepository {
+public interface RunRepository {
+    List<Run> findAll();
 
-    private static final Logger log = LoggerFactory.getLogger(RunRepository.class);
-    private final JdbcClient jdbcClient;
+    Optional<Run> findById(Integer id);
 
-    public RunRepository(JdbcClient jdbcClient) {
-        this.jdbcClient = jdbcClient;
-    }
+    void create(Run run);
 
-    public List<Run> findAll() {
-        return jdbcClient.sql("select * from Run")
-                .query(Run.class)
-                .list();
-    }
+    void update(Run run, Integer id);
 
-    public void create(Run run) {
-        jdbcClient.sql("INSERT INTO Run(id, title, started_on, completed_on, kilometers, location) values(?, ?, ?, ?, ?, ?)")
-                .params(List.of(run.id(), run.title(), run.startedOn(), run.completedOn(), run.kilometers(), run.location().toString()))
-                .update();
-    }
+    void delete(Integer id);
 
+    int count();
+
+    void saveAll(List<Run> runs);
+
+    List<Run> findByLocation(String location);
 }
