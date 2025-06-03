@@ -1,0 +1,14 @@
+# backend/apprunner.yaml
+version: 1.0
+build:
+  commands:
+    # You typically don't need a build command here if your Dockerfile handles everything
+    # e.g., pip install -r requirements.txt is done in Dockerfile
+    build: []
+run:
+  command: uvicorn main:app --host 0.0.0.0 --port 8080
+  network:
+    port: 8080 # The port your FastAPI app listens on inside the container
+  env:
+    - name: PORT
+      value: "8080"
