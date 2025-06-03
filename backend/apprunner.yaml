@@ -1,18 +1,23 @@
 # dostapp/backend/apprunner.yaml
 version: 1.0
-runtime: python3
-runtime-version: 3.11
+runtime: python_3_11 # Correct runtime identifier for Python 3.11
 
 build:
   commands:
+    # This installs your dependencies
     - python -m pip install --no-cache-dir -r requirements.txt
 run:
+  # This starts your FastAPI application
   command: uvicorn main:app --host 0.0.0.0 --port 8000
   network:
+    # This is the port your FastAPI app listens on
     port: 8000
   env:
+    # Set the PORT environment variable for consistency
     - name: PORT
       value: "8000"
+    # IMPORTANT: Include ALL other environment variables your app needs (FreedomPay credentials, etc.)
+    # These should match what you set in the App Runner console or use a .env file locally.
     - name: FREEDOMPAY_MERCHANT_ID
       value: "561002"
     - name: FREEDOMPAY_SECRET_KEY
@@ -22,9 +27,11 @@ run:
     - name: MERCHANT_DOMAIN
       value: "https://www.dostapp.org"
 healthcheck:
+  # Standard health check for your root endpoint
   protocol: HTTP
   path: "/"
   interval: 10
   timeout: 5
   healthyThreshold: 3
   unhealthyThreshold: 5
+  
