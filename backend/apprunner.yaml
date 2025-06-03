@@ -6,11 +6,11 @@ build:
 run:
   command: uvicorn main:app --host 0.0.0.0 --port 8080 # Example for FastAPI
   network:
-    port: 8080
+    port: 8000
   # environment: # Use 'env' not 'environment' for environment variables in App Runner
   env:
     - name: PORT
-      value: "8080"
+      value: "8000"
     # Add other env vars here
     # - name: DATABASE_URL
     #   value: "sqlite:///./sql_app.db"
