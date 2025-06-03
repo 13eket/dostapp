@@ -61,3 +61,8 @@ With your virtual environment active:
 
 ```bash
 uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+### 4. Deployment
+
+Whenever you git push into the repo, AWS AppRunner will automagically deploy and build the backend
