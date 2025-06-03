@@ -1,6 +1,7 @@
 # dostapp/backend/apprunner.yaml
 version: 1.0
-runtime: python3.11
+runtime: python3
+runtime-version: 3.11
 
 build:
   commands:
