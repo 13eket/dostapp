@@ -6,7 +6,6 @@ build:
     build:
       - python -m pip install --no-cache-dir -r requirements.txt
 run:
-  runtime-version: 3.7.7
   command: uvicorn main:app --host 0.0.0.0 --port 8000
   network:
     port: 8000
