@@ -1,6 +1,6 @@
 # dostapp/backend/apprunner.yaml
 version: 1.0
-runtime: python_3_11 # Correct runtime identifier for Python 3.11
+runtime: python311
 
 build:
   commands:
@@ -34,4 +34,3 @@ healthcheck:
   timeout: 5
   healthyThreshold: 3
   unhealthyThreshold: 5
-  
