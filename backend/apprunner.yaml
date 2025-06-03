@@ -1,38 +1,29 @@
 # dostapp/backend/apprunner.yaml
 version: 1.0
-runtime-version: 3.11
+runtime: python3.11
 
 build:
-  # App Runner will automatically find your requirements.txt in the source directory.
-  # This command tells App Runner to install your dependencies before running your app.
   commands:
-    - pip install --no-cache-dir -r requirements.txt
+    - python -m pip install --no-cache-dir -r requirements.txt
 run:
-  # The 'command' field here specifies the entrypoint for your application
-  # using uvicorn.
   command: uvicorn main:app --host 0.0.0.0 --port 8000
   network:
-    # This port must match the --port in your run command.
     port: 8000
   env:
-    # App Runner will inject its own PORT variable, but good to have it defined here for clarity.
     - name: PORT
       value: "8000"
-    # IMPORTANT: Add all required environment variables for your FastAPI app here.
-    # These values will be injected by App Runner into your container.
     - name: FREEDOMPAY_MERCHANT_ID
-      value: "561002" # Replace with your actual ID
+      value: "561002"
     - name: FREEDOMPAY_SECRET_KEY
-      value: "DAnsdFLYehOkYdFR" # Replace with your actual Secret Key
+      value: "DAnsdFLYehOkYdFR"
     - name: FREEDOMPAY_API_URL
       value: "https://api.freedompay.kz/init_payment.php"
     - name: MERCHANT_DOMAIN
       value: "https://www.dostapp.org"
 healthcheck:
-  # Defines how App Runner checks the health of your service.
   protocol: HTTP
   path: "/"
-  interval: 10 # seconds
-  timeout: 5 # seconds
-  healthyThreshold: 3 # consecutive successful checks
-  unhealthyThreshold: 5 # consecutive failed checks
+  interval: 10
+  timeout: 5
+  healthyThreshold: 3
+  unhealthyThreshold: 5
