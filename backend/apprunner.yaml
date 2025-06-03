@@ -1,14 +1,16 @@
 # backend/apprunner.yaml
 version: 1.0
 build:
-  commands:
-    # You typically don't need a build command here if your Dockerfile handles everything
-    # e.g., pip install -r requirements.txt is done in Dockerfile
-    build: []
+  # Build commands are usually empty or minimal if Dockerfile handles dependencies
+  commands: []
 run:
-  command: uvicorn main:app --host 0.0.0.0 --port 8080
+  command: uvicorn main:app --host 0.0.0.0 --port 8080 # Example for FastAPI
   network:
-    port: 8080 # The port your FastAPI app listens on inside the container
+    port: 8080
+  # environment: # Use 'env' not 'environment' for environment variables in App Runner
   env:
     - name: PORT
       value: "8080"
+    # Add other env vars here
+    # - name: DATABASE_URL
+    #   value: "sqlite:///./sql_app.db"
