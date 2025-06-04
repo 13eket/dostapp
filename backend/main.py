@@ -83,6 +83,10 @@ def generate_signature(params: dict, secret_key: str) -> str:
     signature_string = ';'.join(signature_parts)
     return hashlib.md5(signature_string.encode('utf-8')).hexdigest()
 
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the Dostapp API"};
+
 @app.post("/init-payment")
 async def init_payment(request: Request):
     """Initialize payment with FreedomPay and return redirect URL."""
