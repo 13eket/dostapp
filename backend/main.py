@@ -85,7 +85,7 @@ def generate_signature(params: dict, secret_key: str) -> str:
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the Dostapp API"};
+    return {"message": "Welcome to the Dostapp API, checking auomatic deployment"};
 
 @app.post("/init-payment")
 async def init_payment(request: Request):

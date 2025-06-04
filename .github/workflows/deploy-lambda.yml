@@ -1,0 +1,59 @@
+# .github/workflows/deploy-lambda.yml
+
+name: Deploy FastAPI Lambda
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+
+env:
+  LAMBDA_FUNCTION_NAME: DostappLambdaApp
+  AWS_REGION: eu-central-1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Create deployment package directory
+      run: mkdir build
+
+    - name: Build Docker image for Lambda (x86_64)
+      # Assuming Dockerfile and requirements.txt are in 'backend/'
+      # Adjust context path here:
+      run: docker build --platform linux/amd64 -t fastapi-lambda-builder backend/ # <--- ADJUSTED CONTEXT PATH
+
+    - name: Extract dependencies from Docker image
+      run: docker run --rm --entrypoint "" -v "$(pwd)/build":/output fastapi-lambda-builder bash -c "cp -r /app/python/* /output/"
+
+    - name: Copy application code into deployment package
+      run: cp backend/main.py build/ # <--- ADJUSTED SOURCE PATH
+
+    - name: Create Lambda deployment ZIP
+      run: |
+        cd build
+        zip -r ../deployment_package.zip .
+        cd ..
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Deploy Lambda function
+      run: |
+        aws lambda update-function-code \
+          --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
+          --zip-file fileb://deployment_package.zip \
+          --region ${{ env.AWS_REGION }}
