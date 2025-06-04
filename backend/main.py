@@ -24,6 +24,9 @@ secret_key = os.environ['FREEDOMPAY_SECRET_KEY']
 api_url = os.environ.get('FREEDOMPAY_API_URL', 'https://secure.freedompay.kz/payment.php')
 merchant_domain = os.environ['MERCHANT_DOMAIN']
 
+# In-memory storage for users
+users = {}
+
 # Pydantic Models
 class PaymentRequest(BaseModel):
     payment_type: str = Field(
@@ -52,13 +55,13 @@ class PaymentConfig:
                 'recurring_lifetime': '1',  # 1 month
                 'description': 'Basic subscription (1 month)'
             },
-            'economy20': {
+            'basic-3-months': {
                 'amount': '5600',
                 'recurring_start': '1',
                 'recurring_lifetime': '3',  # 3 months
                 'description': 'Economy 20% subscription (3 months)'
             },
-            'economy40': {
+            'basic-6-months': {
                 'amount': '4200',
                 'recurring_start': '1',
                 'recurring_lifetime': '6',  # 6 months
@@ -70,6 +73,13 @@ class PaymentConfig:
         if payment_type not in self.config:
             raise ValueError(f"Invalid payment_type: {payment_type}")
         return self.config[payment_type]
+
+class GoogleAuthRequest(BaseModel):
+    access_token: str = Field(
+        ..., # '...' means this field is required
+        description="Google OAuth access token",
+        example="ya29.a0AWY7Cxn_..."
+    )
 
 def generate_signature(params: dict, secret_key: str) -> str:
     """Generate FreedomPay signature for request authentication."""
@@ -86,6 +96,46 @@ def generate_signature(params: dict, secret_key: str) -> str:
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the Dostapp API, checking auomatic deployment"};
+
+@app.post("/auth/google")
+async def google_auth(request: GoogleAuthRequest):
+    """Handle Google OAuth authentication."""
+    try:
+        # Verify Google token
+        google_response = requests.get(
+            f"https://www.googleapis.com/oauth2/v3/userinfo?access_token={request.access_token}"
+        )
+
+        if not google_response.ok:
+            raise HTTPException(status_code=401, detail="Invalid Google token")
+
+        google_user = google_response.json()
+
+        user_status = "needs_user_form_data"
+        if google_user["email"] not in users:
+            users[google_user["email"]] = {
+                "email": google_user["email"],
+                "name": google_user["name"],
+                "picture": google_user["picture"],
+                "created_at": datetime.now().isoformat()
+            }
+        else:
+            user_status = "needs_payment"
+
+        # Generate a simple JWT (in production, use a proper JWT library)
+        jwt_payload = {
+            "email": google_user["email"],
+            "exp": int(datetime.now().timestamp()) + (0.1 * 60 * 60)
+        }
+        jwt_token = hashlib.md5(json.dumps(jwt_payload).encode()).hexdigest()
+
+        return JSONResponse({
+            "JWToken": jwt_token,
+            "userStatus": user_status
+        })
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/init-payment")
 async def init_payment(request: Request):
