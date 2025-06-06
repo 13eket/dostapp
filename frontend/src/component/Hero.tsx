@@ -64,7 +64,7 @@ const Hero = () => {
             </h2>
             <h1 className="mb-10 font-dinner text-2xl font-bold italic leading-snug">
               УЖИН,
-              <br />С КОТОРОГО НАЧИНАЕТСЯ ДРУЖБА. BEKET
+              <br />С КОТОРОГО НАЧИНАЕТСЯ ДРУЖБА.
             </h1>
             <p className="mb-8 font-body text-base">
               Забронируйте место сейчас и{' '}

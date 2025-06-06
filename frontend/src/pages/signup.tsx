@@ -14,12 +14,6 @@ function SignInButton() {
   const [error, setError] = useState<string | null>(null);
   const { formData } = useFormContext();
 
-  useEffect(() => {
-    if (token) {
-      router.replace('/profile');
-    }
-  }, [token]);
-
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
