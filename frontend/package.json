@@ -26,6 +26,7 @@
     "react-dom": "^19.0.0",
     "react-payment-inputs": "^1.2.0",
     "react-router-dom": "^7.4.1",
+    "snakecase-keys": "^8.0.1",
     "styled-jsx-plugin-postcss": "^4.0.1",
     "survey-core": "^2.0.1",
     "survey-react-ui": "^2.0.1",

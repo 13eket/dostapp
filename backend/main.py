@@ -9,7 +9,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import PlainTextResponse, JSONResponse
 from mangum import Mangum
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, Dict, Any
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -25,8 +25,17 @@ secret_key = os.environ['FREEDOMPAY_SECRET_KEY']
 api_url = os.environ.get('FREEDOMPAY_API_URL', 'https://secure.freedompay.kz/payment.php')
 merchant_domain = os.environ['MERCHANT_DOMAIN']
 
-# In-memory storage for users
-users = {}
+# In-memory "database"
+users = {
+    "user@example.com": {
+        "google_token": "...",
+        "survey": {...},
+        "phone_number": "...",
+        "dinner_preferences": {...},
+        "email": "user@example.com"
+    },
+    # more users...
+}
 
 # Pydantic Models
 class PaymentRequest(BaseModel):
@@ -75,12 +84,12 @@ class PaymentConfig:
             raise ValueError(f"Invalid payment_type: {payment_type}")
         return self.config[payment_type]
 
-class GoogleAuthRequest(BaseModel):
-    access_token: str = Field(
-        ..., # '...' means this field is required
-        description="Google OAuth access token",
-        example="ya29.a0AWY7Cxn_..."
-    )
+class GoogleOnboardRequest(BaseModel):
+    google_token: str
+    survey_answers: Optional[Dict[str, Any]] = None
+    phone_number: Optional[str] = None
+    dinner_preferences: Optional[Dict[str, Any]] = None
+    has_paid: Optional[bool] = False
 
 def generate_signature(params: dict, secret_key: str) -> str:
     """Generate FreedomPay signature for request authentication."""
@@ -105,47 +114,53 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+REQUIRED_FIELDS = ["survey_answers", "phone_number", "dinner_preferences"]
+
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the Dostapp API, checking auomatic deployment"};
 
 @app.post("/auth/google")
-async def google_auth(request: GoogleAuthRequest):
-    """Handle Google OAuth authentication."""
+async def google_onboard(data: GoogleOnboardRequest):
+    """Handle Google OAuth onboarding and user data update."""
     try:
         # Verify Google token
         google_response = requests.get(
-            f"https://www.googleapis.com/oauth2/v3/userinfo?access_token={request.access_token}"
+            f"https://www.googleapis.com/oauth2/v3/userinfo?access_token={data.google_token}"
         )
-
         if not google_response.ok:
             raise HTTPException(status_code=401, detail="Invalid Google token")
-
         google_user = google_response.json()
-
-        user_status = "needs_user_form_data"
-        if google_user["email"] not in users:
-            users[google_user["email"]] = {
-                "email": google_user["email"],
-                "name": google_user["name"],
-                "picture": google_user["picture"],
-                "created_at": datetime.now().isoformat()
-            }
+        email = google_user["email"]
+        # Get or create user record
+        user = users.get(email, {})
+        user["email"] = email
+        user["name"] = google_user.get("name")
+        user["picture"] = google_user.get("picture")
+        user["google_token"] = data.google_token
+        user["survey_answers"] = data.survey_answers or user.get("survey_answers")
+        user["phone_number"] = data.phone_number or user.get("phone_number")
+        user["dinner_preferences"] = data.dinner_preferences or user.get("dinner_preferences")
+        user["has_paid"] = data.has_paid or user.get("has_paid", False)
+        user["created_at"] = user.get("created_at") or datetime.now().isoformat()
+        users[email] = user
+        # Check for missing fields
+        missing_fields = [field for field in REQUIRED_FIELDS if not user.get(field)]
+        if not missing_fields and not user.get("has_paid", False):
+            next_step = "payment"
         else:
-            user_status = "needs_payment"
-
-        # Generate a simple JWT (in production, use a proper JWT library)
+            next_step = missing_fields[0] if missing_fields else "cabinet"
+            
+        # Generate a simple JWT TODO: (in production, use a proper JWT library)
         jwt_payload = {
-            "email": google_user["email"],
+            "email": email,
             "exp": int(datetime.now().timestamp()) + (0.1 * 60 * 60)
         }
         jwt_token = hashlib.md5(json.dumps(jwt_payload).encode()).hexdigest()
-
         return JSONResponse({
-            "JWToken": jwt_token,
-            "userStatus": user_status
+            "jwt": jwt_token,
+            "next_step": next_step
         })
-
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

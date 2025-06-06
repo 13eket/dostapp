@@ -1,15 +1,24 @@
 'use client';
 
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
+import { useFormContext } from '@/context/FormContext';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { toSnakeCaseDeep } from '@/utils/api';
+import assert from 'assert';
 
 function SignInButton() {
   const router = useRouter();
-  const { setToken } = useAuth();
+  const { setToken, token } = useAuth();
   const [error, setError] = useState<string | null>(null);
+  const { formData } = useFormContext();
+
+  useEffect(() => {
+    if (token) {
+      router.replace('/profile');
+    }
+  }, [token]);
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -20,23 +29,40 @@ function SignInButton() {
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ access_token: tokenResponse.access_token }),
+            body: JSON.stringify({
+              google_token: tokenResponse.access_token,
+              ...toSnakeCaseDeep(formData),
+            }),
           },
         );
 
-        if (!res.ok) throw new Error('Backend Google Auth Failed');
+        assert(res.ok, 'Backend Google Auth Failed');
 
-        const { JWToken, userStatus } = await res.json();
+        const data = await res.json();
 
-        setToken(JWToken);
+        assert(data.jwt, 'Backend did not provide JWT token');
+        assert(data.next_step != null && data.next_step != undefined, 'Backend did not provide next step');
+        
+        setToken(data.jwt);
 
-        if (userStatus === 'needs_user_form_data') {
-          // starts gathering user info from phone number
-          router.push('/phoneNumber');
-        } else if (userStatus === 'needs_payment') {
-          router.push('/payment');
-        } else {
-          router.push('/profile');
+        switch (data.next_step) {
+          case "cabinet":
+            router.push("/profile");
+            break;
+          case "payment":
+            router.push("/payment");
+            break;
+          case "survey_answers":
+            router.push("/survey");
+            break;
+          case "phone_number":
+            router.push("/phoneNumber");
+            break;
+          case "dinner_preferences":
+            router.push("/dinnerPreferences");
+            break;
+          default:
+            router.push("/");
         }
       } catch (err) {
         setError('Failed to sign in. Please try again.');
