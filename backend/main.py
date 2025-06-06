@@ -5,7 +5,7 @@ import requests
 import uuid
 from datetime import datetime
 import xml.etree.ElementTree as ET
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import PlainTextResponse, JSONResponse
 from mangum import Mangum
 from pydantic import BaseModel, Field
@@ -35,6 +35,10 @@ users = {
         "email": "user@example.com"
     },
     # more users...
+}
+
+token_to_user = {
+    "google_token": "user@example.com",
 }
 
 # Pydantic Models
@@ -165,6 +169,8 @@ async def google_onboard(data: GoogleOnboardRequest):
             "exp": int(datetime.now().timestamp()) + (0.1 * 60 * 60)
         }
         jwt_token = hashlib.md5(json.dumps(jwt_payload).encode()).hexdigest()
+
+        token_to_user[jwt_token] = email
         return JSONResponse({
             "jwt": jwt_token,
             "next_step": next_step
@@ -235,6 +241,36 @@ async def init_payment(request: Request):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/profile")
+async def get_profile(authorization: str = Header(...)):
+    """Return user profile if the token is valid."""
+    try:
+        if not authorization.startswith("Bearer "):
+            raise HTTPException(status_code=401, detail="Invalid token format")
+        
+        token = authorization.split(" ")[1]
+        if not token:
+            raise HTTPException(status_code=401, detail="Token is required")
+        email = token_to_user.get(token)
+        if not email:
+            raise HTTPException(status_code=401, detail="Invalid or expired token")
+
+        user = users.get(email)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        return {
+            "email": user.get("email"),
+            "name": user.get("name"),
+            "picture": user.get("picture"),
+            "phone_number": user.get("phone_number"),
+            "survey_answers": user.get("survey_answers"),
+            "dinner_preferences": user.get("dinner_preferences"),
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
 # For local testing
 if __name__ == "__main__":
     import uvicorn

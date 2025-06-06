@@ -9,3 +9,6 @@
 # Ignore build outputs
 build/
 venv/
+
+# Environments
+.env
