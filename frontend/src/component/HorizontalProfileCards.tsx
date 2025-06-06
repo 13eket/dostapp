@@ -21,11 +21,11 @@ const HorizontalProfileCards = () => {
             zodiac="Водолей"
           />
           <ProfileCard
-            name="Вера"
-            age={71}
+            name="Кунжан"
+            age={65}
             description="Пенсионерка-путешественница посетила 23 страны."
-            image="https://dostapp.s3.eu-north-1.amazonaws.com/photo_6147888545264685735_x.jpg"
-            zodiac="Дева"
+            image="https://dostapp.s3.eu-north-1.amazonaws.com/photo_6201853211611087616_y.jpg"
+            zodiac="Весы"
           />
           <ProfileCard
             name="Рауан"
