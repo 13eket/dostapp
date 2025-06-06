@@ -11,6 +11,7 @@ from mangum import Mangum
 from pydantic import BaseModel, Field
 from typing import Optional
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 handler = Mangum(app)
@@ -92,6 +93,17 @@ def generate_signature(params: dict, secret_key: str) -> str:
     signature_parts.append(secret_key)
     signature_string = ';'.join(signature_parts)
     return hashlib.md5(signature_string.encode('utf-8')).hexdigest()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        merchant_domain
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def read_root():

@@ -16,7 +16,7 @@ function SignInButton() {
       try {
         setError(null);
         const res = await fetch(
-          'https://4225u9e812.execute-api.eu-central-1.amazonaws.com/default/auth/google',
+          `${process.env.NEXT_PUBLIC_API_GATEWAY_URL}/auth/google`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
