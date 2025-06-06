@@ -145,12 +145,20 @@ async def google_onboard(data: GoogleOnboardRequest):
         user["created_at"] = user.get("created_at") or datetime.now().isoformat()
         users[email] = user
         # Check for missing fields
-        missing_fields = [field for field in REQUIRED_FIELDS if not user.get(field)]
-        if not missing_fields and not user.get("has_paid", False):
+        # Find any missing required fields in user profile
+        missing_fields = [
+            field 
+            for field in REQUIRED_FIELDS 
+            if not user.get(field)
+        ]
+        
+        if missing_fields:
+            next_step = missing_fields[0]
+        elif not user.get("has_paid", False):
             next_step = "payment"
         else:
-            next_step = missing_fields[0] if missing_fields else "cabinet"
-            
+            next_step = "cabinet"
+
         # Generate a simple JWT TODO: (in production, use a proper JWT library)
         jwt_payload = {
             "email": email,
