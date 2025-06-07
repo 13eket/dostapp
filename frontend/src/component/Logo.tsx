@@ -1,4 +1,4 @@
-import { AppConfig } from '../utils/AppConfig';
+import { AppConfig } from "../utils/AppConfig";
 
 type ILogoProps = {
   xl?: boolean;
@@ -6,8 +6,8 @@ type ILogoProps = {
 
 const Logo = (props: ILogoProps) => {
   const fontStyle = props.xl
-    ? 'font-semibold text-4xl md:text-4xl'
-    : 'font-semibold text-2xl md:text-2xl';
+    ? "font-semibold text-4xl md:text-4xl"
+    : "font-semibold text-2xl md:text-2xl";
 
   return (
     <span

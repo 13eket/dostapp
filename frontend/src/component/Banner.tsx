@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { Button } from '@/button/Button';
-import { handleBookingEmbedded } from '@/utils/routing';
+import { Button } from "@/button/Button";
+import { handleBookingEmbedded } from "@/utils/routing";
 
-import { CTABanner } from '../cta/CTABanner';
-import { Section } from '../layout/Section';
+import { CTABanner } from "../cta/CTABanner";
+import { Section } from "../layout/Section";
 
 const Banner = () => {
-  const [surveyUrl, setSurveyUrl] = useState('');
+  const [surveyUrl, setSurveyUrl] = useState("");
 
   useEffect(() => {
     // Dynamically set the survey URL on the client side

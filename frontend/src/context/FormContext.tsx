@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from "react";
 
 type DinnerPreferences = {
   spending: string;
@@ -8,7 +8,7 @@ type DinnerPreferences = {
 };
 
 type FormData = {
-  surveyAnswers?: Record<string, any>;
+  surveyAnswers?: Record<string, unknown>;
   phoneNumber?: string;
   dinnerPreferences?: DinnerPreferences;
 };
@@ -33,7 +33,7 @@ export function FormProvider({ children }: { children: React.ReactNode }) {
 export function useFormContext() {
   const context = useContext(FormContext);
   if (context === undefined) {
-    throw new Error('useFormContext must be used within a FormProvider');
+    throw new Error("useFormContext must be used within a FormProvider");
   }
   return context;
 }

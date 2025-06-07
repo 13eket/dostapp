@@ -13,13 +13,13 @@ export const getNextWednesdaysAsStrings = (): string[] => {
     nextWednesday.setHours(19, 0, 0, 0);
 
     wednesdays.push(
-      nextWednesday.toLocaleDateString('ru-RU', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
+      nextWednesday.toLocaleDateString("ru-RU", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
       }),
     );
   }
@@ -43,12 +43,12 @@ export const getNextWednesdays = (): Date[] => {
 };
 
 export const formatDate = (date: Date): string => {
-  return date.toLocaleDateString('ru-RU', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+  return date.toLocaleDateString("ru-RU", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 };

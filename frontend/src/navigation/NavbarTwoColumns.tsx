@@ -1,8 +1,9 @@
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
-import { Logo } from '@/component/Logo';
-import { handleBookingEmbedded } from '@/utils/routing';
+import { Logo } from "@/component/Logo";
+import { handleBookingEmbedded } from "@/utils/routing";
+import Image from "next/image";
 
 const Navbar = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -12,14 +13,14 @@ const Navbar = () => {
       setIsMobile(window.innerWidth < 768);
     };
     handleResize();
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
-  const fixedButtonWidth = isMobile ? 'w-28' : 'w-32';
+  const fixedButtonWidth = isMobile ? "w-28" : "w-32";
 
   return (
     <div className="flex h-16 flex-col items-center justify-between border-b border-black bg-[#FDF5EA] md:flex-row">
@@ -32,7 +33,7 @@ const Navbar = () => {
               href="https://www.instagram.com/dostapp_kz"
               className="flex h-full items-center"
             >
-              <img
+              <Image
                 src="/assets/images/instagram-logo.png"
                 alt="Instagram Logo"
                 className="size-5"

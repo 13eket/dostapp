@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { getNextWednesdays } from '../utils/date';
+import { getNextWednesdays } from "../utils/date";
 
 const Countdown = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -44,10 +44,10 @@ const Countdown = () => {
   }, []);
 
   const unitTranslations = {
-    days: 'дни',
-    hours: 'часы',
-    mins: 'мин',
-    secs: 'сек',
+    days: "дни",
+    hours: "часы",
+    mins: "мин",
+    secs: "сек",
   };
 
   return (

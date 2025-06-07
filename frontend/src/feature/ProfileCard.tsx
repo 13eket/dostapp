@@ -1,4 +1,4 @@
-import className from 'classnames';
+import className from "classnames";
 
 type ProfileCardProps = {
   name: string;
@@ -16,12 +16,12 @@ const ProfileCard = ({
   zodiac,
 }: ProfileCardProps) => {
   const profileCardClass = className(
-    'relative',
-    'w-64',
-    'h-[40rem]',
-    'flex-shrink-0',
-    'flex',
-    'flex-col',
+    "relative",
+    "w-64",
+    "h-[40rem]",
+    "flex-shrink-0",
+    "flex",
+    "flex-col",
   );
 
   return (
@@ -30,14 +30,14 @@ const ProfileCard = ({
         className="h-[50%] w-full overflow-hidden rounded-3xl border border-black" // Added border
         style={{
           backgroundImage: `url('${image}')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       ></div>
       <div className="relative h-[30%] w-full">
         <div
           className="absolute -top-6 left-0 mt-10 rounded-full border border-black bg-white p-2"
-          style={{ backgroundColor: 'rgba(255, 255, 255, 0)', width: '70%' }}
+          style={{ backgroundColor: "rgba(255, 255, 255, 0)", width: "70%" }}
         >
           <h2 className="text-base font-semibold text-gray-900">
             {name}, {age}

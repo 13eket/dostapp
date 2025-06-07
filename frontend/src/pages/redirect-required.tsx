@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const GettingStarted: React.FC = () => {
   const [copied, setCopied] = useState(false);
@@ -6,7 +6,7 @@ const GettingStarted: React.FC = () => {
 
   const copyToClipboard = () => {
     navigator.clipboard
-      .writeText('https://dostapp.org/survey')
+      .writeText("https://dostapp.org/survey")
       .then(() => {
         setCopied(true);
         setTimeout(() => setCopied(false), 3000);
@@ -18,9 +18,9 @@ const GettingStarted: React.FC = () => {
   };
 
   const getButtonText = () => {
-    if (copied) return 'Скопировано!';
-    if (copyError) return 'Ошибка';
-    return 'Скопировать ссылку';
+    if (copied) return "Скопировано!";
+    if (copyError) return "Ошибка";
+    return "Скопировать ссылку";
   };
 
   return (

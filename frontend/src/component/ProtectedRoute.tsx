@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from "../context/AuthContext";
 
 export default function ProtectedRoute({
   children,
@@ -15,7 +15,7 @@ export default function ProtectedRoute({
 
   useEffect(() => {
     if (!loading && !token) {
-      router.push('/signup');
+      router.push("/signup");
     }
   }, [token, loading, router]);
 

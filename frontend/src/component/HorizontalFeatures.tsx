@@ -1,7 +1,7 @@
-import { handleBookingEmbedded } from '@/utils/routing';
+import { handleBookingEmbedded } from "@/utils/routing";
 
-import { HorizontalFeatureColumn } from '../feature/HorizontalFeatureColumn';
-import { Section } from '../layout/Section';
+import { HorizontalFeatureColumn } from "../feature/HorizontalFeatureColumn";
+import { Section } from "../layout/Section";
 
 const HorizontalFeatures = () => {
   return (

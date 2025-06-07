@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
-const COMPANY_NAME = 'Dostapp';
-const COMPANY_EMAIL = 'bravomediagroup13@gmail.com';
-const COMPANY_PHONE = '+7 (706) 639-50-62';
+const COMPANY_NAME = "Dostapp";
+const COMPANY_EMAIL = "bravomediagroup13@gmail.com";
+const COMPANY_PHONE = "+7 (706) 639-50-62";
 const IP_DETAILS = 'ИП "Dostapp"';
 
 const PrivacyPolicy = () => (
@@ -145,7 +145,7 @@ const PrivacyPolicy = () => (
       <p className="mb-2">При использовании Приложения:</p>
       <ul className="ml-6 list-disc">
         <li className="mb-1">
-          Обмен контактной информацией:{' '}
+          Обмен контактной информацией:{" "}
           <strong>
             Пользователи не получают доступ к контактным данным, фотографиям или
             иным личным сведениям других участников ужинов. Приложение не
@@ -153,7 +153,7 @@ const PrivacyPolicy = () => (
           </strong>
         </li>
         <li className="mb-1">
-          Организация мероприятий:{' '}
+          Организация мероприятий:{" "}
           <strong>
             Ужин и мероприятия проводятся в общественных местах, где формируется
             группа людей. Исполнитель не несёт ответственность за инциденты,
@@ -382,7 +382,7 @@ const PrivacyPolicy = () => (
         Пользователь может обращаться по следующим контактам:
       </p>
       <p className="mb-1">
-        Электронная почта:{' '}
+        Электронная почта:{" "}
         <a
           href={`mailto:${COMPANY_EMAIL}`}
           className="text-blue-600 hover:underline"

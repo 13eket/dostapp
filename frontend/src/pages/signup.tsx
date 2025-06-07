@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
-import { useFormContext } from '@/context/FormContext';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { toSnakeCaseDeep } from '@/utils/api';
-import assert from 'assert';
+import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
+import { useFormContext } from "@/context/FormContext";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import { toSnakeCaseDeep } from "@/utils/api";
+import assert from "assert";
 
 function SignInButton() {
   const router = useRouter();
@@ -21,8 +21,8 @@ function SignInButton() {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_GATEWAY_URL}/auth/google`,
           {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               google_token: tokenResponse.access_token,
               ...toSnakeCaseDeep(formData),
@@ -30,12 +30,15 @@ function SignInButton() {
           },
         );
 
-        assert(res.ok, 'Backend Google Auth Failed');
+        assert(res.ok, "Backend Google Auth Failed");
 
         const data = await res.json();
 
-        assert(data.jwt, 'Backend did not provide JWT token');
-        assert(data.next_step != null && data.next_step != undefined, 'Backend did not provide next step');
+        assert(data.jwt, "Backend did not provide JWT token");
+        assert(
+          data.next_step != null && data.next_step != undefined,
+          "Backend did not provide next step",
+        );
 
         setToken(data.jwt);
 
@@ -59,11 +62,11 @@ function SignInButton() {
             router.push("/");
         }
       } catch (err) {
-        setError('Failed to sign in. Please try again.');
+        setError("Failed to sign in. Please try again.");
       }
     },
     onError: () => {
-      setError('Google sign-in failed. Please try again.');
+      setError("Google sign-in failed. Please try again.");
     },
   });
 
@@ -113,7 +116,9 @@ function SignInButton() {
 
 export default function SignUpPage() {
   return (
-    <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ''}>
+    <GoogleOAuthProvider
+      clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}
+    >
       <SignInButton />
     </GoogleOAuthProvider>
   );

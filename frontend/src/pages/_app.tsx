@@ -1,11 +1,11 @@
-import '../styles/global.css';
+import "../styles/global.css";
 
-import type { AppProps } from 'next/app';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import type { AppProps } from "next/app";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
-import { AuthProvider } from '@/context/AuthContext';
-import { FormProvider } from '@/context/FormContext';
+import { AuthProvider } from "@/context/AuthContext";
+import { FormProvider } from "@/context/FormContext";
 
 function ScrollToTop() {
   const router = useRouter();
@@ -15,10 +15,10 @@ function ScrollToTop() {
       window.scrollTo(0, 0);
     };
 
-    router.events.on('routeChangeComplete', handleRouteChange);
+    router.events.on("routeChangeComplete", handleRouteChange);
 
     return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
+      router.events.off("routeChangeComplete", handleRouteChange);
     };
   }, [router.events]);
 

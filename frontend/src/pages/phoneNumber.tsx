@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-import { useFormContext } from '@/context/FormContext';
-import { formatPhoneNumber } from '@/utils/numberFormats';
+import { useFormContext } from "@/context/FormContext";
+import { formatPhoneNumber } from "@/utils/numberFormats";
 
-import ProtectedRoute from '../component/ProtectedRoute';
+import ProtectedRoute from "../component/ProtectedRoute";
 
 const PhoneNumber = () => {
   const { formData, setFormData } = useFormContext();
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState("");
   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -22,7 +22,7 @@ const PhoneNumber = () => {
       phoneNumber: fullPhoneNumber,
     };
     setFormData(updatedFormData);
-    router.push('/dinnerPreferences');
+    router.push("/dinnerPreferences");
   };
 
   const isPhoneComplete = phoneNumber.length >= 10;
@@ -37,7 +37,7 @@ const PhoneNumber = () => {
           </div>
           <div className="my-4 border-t border-black"></div>
           <h2 className="mb-10 text-center font-dinner text-xl font-bold leading-tight">
-            ВАШ НОМЕР{' '}
+            ВАШ НОМЕР{" "}
             <span className="font-dinner font-medium italic">ТЕЛЕФОНА</span>?
           </h2>
         </div>
@@ -56,7 +56,7 @@ const PhoneNumber = () => {
                   type="tel"
                   value={formatPhoneNumber(phoneNumber)}
                   onChange={(e) =>
-                    setPhoneNumber(e.target.value.replace(/\D/g, ''))
+                    setPhoneNumber(e.target.value.replace(/\D/g, ""))
                   }
                   placeholder="XXX XXX XX XX"
                   className="flex-1 text-lg outline-none placeholder:text-gray-400"
@@ -77,8 +77,8 @@ const PhoneNumber = () => {
             disabled={!isPhoneComplete}
             className={`mx-auto block w-full max-w-[360px] rounded-xl py-4 text-lg font-semibold text-white transition-colors ${
               isPhoneComplete
-                ? 'bg-orange-500 hover:bg-orange-600'
-                : 'cursor-not-allowed bg-gray-300'
+                ? "bg-orange-500 hover:bg-orange-600"
+                : "cursor-not-allowed bg-gray-300"
             }`}
           >
             Подтвердить

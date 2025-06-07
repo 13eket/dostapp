@@ -1,27 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { Footer } from '@/component/Footer';
+import { Footer } from "@/component/Footer";
 
-import { getNextWednesdaysAsStrings } from '../utils/date';
-import ProtectedRoute from '@/component/ProtectedRoute';
+import { getNextWednesdaysAsStrings } from "../utils/date";
+import ProtectedRoute from "@/component/ProtectedRoute";
 
 const HEADER_CONTENT = {
   subscription: {
     image:
       "bg-[url('https://dostapp.s3.eu-north-1.amazonaws.com/payment_dinner.jpg')]",
-    title: 'НЕОГРАНИЧЕННЫЙ ДОСТУП',
-    subtitle: 'Все ужины, каждую среду',
+    title: "НЕОГРАНИЧЕННЫЙ ДОСТУП",
+    subtitle: "Все ужины, каждую среду",
   },
   ticket: {
     image:
       "bg-[url('https://dostapp.s3.eu-north-1.amazonaws.com/7742faabf1684a4e3d241d555b685715.jpg')]",
-    title: 'РАЗОВЫЙ БИЛЕТ',
-    subtitle: 'Один ужин на выбранную дату',
+    title: "РАЗОВЫЙ БИЛЕТ",
+    subtitle: "Один ужин на выбранную дату",
   },
 };
 
 const TopImageSection = ({ isTicket = false }: { isTicket?: boolean }) => {
-  const content = HEADER_CONTENT[isTicket ? 'ticket' : 'subscription'];
+  const content = HEADER_CONTENT[isTicket ? "ticket" : "subscription"];
 
   return (
     <div
@@ -46,20 +46,20 @@ interface SubscriptionCardProps {
 const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
   type,
   price,
-  save = 'Discover',
+  save = "Discover",
   isSelected,
   onClick,
 }) => {
   return (
     <div
       onClick={onClick}
-      className={`relative flex flex-col border ${isSelected ? 'border-2 border-black' : 'border-gray-300'} mx-1 h-[200px] flex-1 cursor-pointer rounded-[15px] bg-white px-4 pb-4 pt-14 transition-all hover:shadow-md`}
+      className={`relative flex flex-col border ${isSelected ? "border-2 border-black" : "border-gray-300"} mx-1 h-[200px] flex-1 cursor-pointer rounded-[15px] bg-white px-4 pb-4 pt-14 transition-all hover:shadow-md`}
     >
       <div
-        className={`absolute inset-x-0 top-0 ${isSelected ? 'bg-[#F64100]' : 'bg-gray-200'} flex h-14 flex-col justify-end rounded-t-[13px] px-4 pb-2`}
+        className={`absolute inset-x-0 top-0 ${isSelected ? "bg-[#F64100]" : "bg-gray-200"} flex h-14 flex-col justify-end rounded-t-[13px] px-4 pb-2`}
       >
         <div
-          className={`font-bold ${isSelected ? 'text-white' : 'text-black'} pt-1 text-xs`}
+          className={`font-bold ${isSelected ? "text-white" : "text-black"} pt-1 text-xs`}
         >
           {save}
         </div>
@@ -73,8 +73,8 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
 };
 
 interface PaymentOptionTabsProps {
-  selectedTab: 'subscription' | 'ticket';
-  onTabChange: (tab: 'subscription' | 'ticket') => void;
+  selectedTab: "subscription" | "ticket";
+  onTabChange: (tab: "subscription" | "ticket") => void;
 }
 
 const PaymentOptionTabs: React.FC<PaymentOptionTabsProps> = ({
@@ -85,21 +85,21 @@ const PaymentOptionTabs: React.FC<PaymentOptionTabsProps> = ({
     <div className="mx-auto mt-5 flex w-full max-w-[380px] rounded-[25px] border border-gray-200 bg-white p-1 shadow-sm">
       <button
         className={`mx-[2px] w-[180px] cursor-pointer rounded-[20px] px-5 py-2.5 font-bold transition-all duration-200 ${
-          selectedTab === 'subscription'
-            ? 'bg-black text-white shadow-md'
-            : 'bg-transparent text-black hover:bg-gray-100'
+          selectedTab === "subscription"
+            ? "bg-black text-white shadow-md"
+            : "bg-transparent text-black hover:bg-gray-100"
         }`}
-        onClick={() => onTabChange('subscription')}
+        onClick={() => onTabChange("subscription")}
       >
         Подписка
       </button>
       <button
         className={`mx-[2px] w-[180px] cursor-pointer rounded-[20px] px-5 py-2.5 font-bold transition-all duration-200 ${
-          selectedTab === 'ticket'
-            ? 'bg-black text-white shadow-md'
-            : 'bg-transparent text-black hover:bg-gray-100'
+          selectedTab === "ticket"
+            ? "bg-black text-white shadow-md"
+            : "bg-transparent text-black hover:bg-gray-100"
         }`}
-        onClick={() => onTabChange('ticket')}
+        onClick={() => onTabChange("ticket")}
       >
         Разовый билет
       </button>
@@ -164,28 +164,28 @@ const TicketDetailsCard: React.FC<TicketDetailsCardProps> = ({
 };
 
 const paymentTypeMap: Record<string, { label: string; payload: string }> = {
-  '1 Month': { label: 'Подписка 1 месяц за 7,000 ₸', payload: 'basic' },
-  '3 Months': { label: 'Подписка 3 месяца за 16,800 ₸', payload: 'economy20' },
-  '6 Months': { label: 'Подписка 6 месяцев за 25,200 ₸', payload: 'economy40' },
+  "1 Month": { label: "Подписка 1 месяц за 7,000 ₸", payload: "basic" },
+  "3 Months": { label: "Подписка 3 месяца за 16,800 ₸", payload: "economy20" },
+  "6 Months": { label: "Подписка 6 месяцев за 25,200 ₸", payload: "economy40" },
 };
 
 const PaymentsPage = () => {
-  const [selectedTab, setSelectedTab] = useState<'subscription' | 'ticket'>(
-    'subscription',
+  const [selectedTab, setSelectedTab] = useState<"subscription" | "ticket">(
+    "subscription",
   );
-  const [selectedCard, setSelectedCard] = useState<string>('3 Months');
+  const [selectedCard, setSelectedCard] = useState<string>("3 Months");
   const [ticketDate, setTicketDate] = useState<string>(
-    getNextWednesdaysAsStrings()[0] ?? '',
+    getNextWednesdaysAsStrings()[0] ?? "",
   );
-  const [ticketCity, setTicketCity] = useState<string>('Астана');
+  const [ticketCity, setTicketCity] = useState<string>("Астана");
 
-  const handleTabChange = (tab: 'subscription' | 'ticket') => {
+  const handleTabChange = (tab: "subscription" | "ticket") => {
     setSelectedTab(tab);
   };
 
   const handleCardClick = (cardType: string) => {
     setSelectedCard(cardType);
-    localStorage.setItem('subscription_type', cardType);
+    localStorage.setItem("subscription_type", cardType);
   };
 
   const handleDateChange = (date: string) => {
@@ -199,53 +199,53 @@ const PaymentsPage = () => {
   const handlePaymentRedirect = async (paymentType: string) => {
     try {
       const res = await fetch(
-        'https://l6f6z8o5ck.execute-api.eu-north-1.amazonaws.com/init-payment',
+        "https://l6f6z8o5ck.execute-api.eu-north-1.amazonaws.com/init-payment",
         {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ payment_type: paymentType }),
         },
       );
-      if (!res.ok) throw new Error('Network response was not ok');
+      if (!res.ok) throw new Error("Network response was not ok");
       const url = await res.text();
       window.location.href = url;
     } catch (error) {
-      alert('Ошибка при оплате. Попробуйте еще раз.');
+      alert("Ошибка при оплате. Попробуйте еще раз.");
     }
   };
 
   return (
     <ProtectedRoute>
       <div className="flex min-h-screen flex-col bg-[#FDF1DE]">
-        <TopImageSection isTicket={selectedTab === 'ticket'} />
+        <TopImageSection isTicket={selectedTab === "ticket"} />
         <div className="mx-auto max-w-[600px] p-0 font-sans">
           <PaymentOptionTabs
             selectedTab={selectedTab}
             onTabChange={handleTabChange}
           />
 
-          {selectedTab === 'subscription' ? (
+          {selectedTab === "subscription" ? (
             <div className="mt-5 flex justify-between">
               <SubscriptionCard
                 type="1 Месяц"
                 price="7,000 ₸/мес"
                 save="Базовый"
-                isSelected={selectedCard === '1 Month'}
-                onClick={() => handleCardClick('1 Month')}
+                isSelected={selectedCard === "1 Month"}
+                onClick={() => handleCardClick("1 Month")}
               />
               <SubscriptionCard
                 type="3 Месяца"
                 price="5,600 ₸/мес"
                 save="Сэкономьте 20%"
-                isSelected={selectedCard === '3 Months'}
-                onClick={() => handleCardClick('3 Months')}
+                isSelected={selectedCard === "3 Months"}
+                onClick={() => handleCardClick("3 Months")}
               />
               <SubscriptionCard
                 type="6 Месяцев"
                 price="4,200 ₸/мес"
                 save="Сэкономьте 40%"
-                isSelected={selectedCard === '6 Months'}
-                onClick={() => handleCardClick('6 Months')}
+                isSelected={selectedCard === "6 Months"}
+                onClick={() => handleCardClick("6 Months")}
               />
             </div>
           ) : (
@@ -258,7 +258,7 @@ const PaymentsPage = () => {
             />
           )}
 
-          {selectedTab === 'subscription' ? (
+          {selectedTab === "subscription" ? (
             <>
               {Object.entries(paymentTypeMap).map(
                 ([key, { label, payload }]) =>
@@ -275,7 +275,7 @@ const PaymentsPage = () => {
             </>
           ) : (
             <button
-              onClick={() => handlePaymentRedirect('one-time')}
+              onClick={() => handlePaymentRedirect("one-time")}
               className="mt-5 w-full rounded-xl border-none bg-[#F64100] px-5 py-3 font-bold text-white transition-colors hover:bg-[#E53900]"
             >
               Разовый билет за 5,000 ₸

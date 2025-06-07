@@ -1,11 +1,11 @@
 export const isEmbeddedBrowser = () => {
   const userAgent = navigator.userAgent.toLowerCase();
   return (
-    userAgent.includes('instagram') ||
-    userAgent.includes('tiktok') ||
-    userAgent.includes('fbav') ||
-    userAgent.includes('fban') ||
-    userAgent.includes('twitter')
+    userAgent.includes("instagram") ||
+    userAgent.includes("tiktok") ||
+    userAgent.includes("fbav") ||
+    userAgent.includes("fban") ||
+    userAgent.includes("twitter")
   );
 };
 
@@ -15,8 +15,8 @@ export const isIOS = () => {
 };
 
 export const handleBookingEmbedded = () => {
-  const surveyUrl = '/survey';
-  const redirectUrl = '/redirect-required';
+  const surveyUrl = "/survey";
+  const redirectUrl = "/redirect-required";
   const fullURL = window.location.origin + surveyUrl;
 
   if (isEmbeddedBrowser()) {

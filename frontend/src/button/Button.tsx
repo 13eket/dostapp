@@ -1,5 +1,5 @@
-import className from 'classnames';
-import React from 'react';
+import className from "classnames";
+import React from "react";
 
 type IButtonProps = {
   xl?: boolean;
@@ -11,9 +11,9 @@ type IButtonProps = {
 const Button = (props: IButtonProps) => {
   const btnClass = className({
     btn: true,
-    'btn-xl': props.xl,
-    'btn-base': !props.xl,
-    'btn-primary': true,
+    "btn-xl": props.xl,
+    "btn-base": !props.xl,
+    "btn-primary": true,
   });
 
   // If href is provided, render as an anchor tag

@@ -1,6 +1,6 @@
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
+    gtag: (...args: unknown[]) => void;
     gapi: {
       load: (library: string, callback: () => void) => void;
       auth2: {
@@ -15,7 +15,7 @@ declare global {
             height: number;
             longtitle: boolean;
             theme: string;
-            onsuccess: (googleUser: any) => void;
+            onsuccess: (googleUser: unknown) => void;
           },
         ) => void;
       };

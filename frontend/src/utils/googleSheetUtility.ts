@@ -3,7 +3,7 @@ const flattenObject = (obj: any, result: any = {}) => {
   // eslint-disable-next-line no-restricted-syntax
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      if (key === 'dinnerPreferences' || key === 'surveyAnswers') {
+      if (key === "dinnerPreferences" || key === "surveyAnswers") {
         newResult[key] = JSON.stringify(obj[key]);
       } else {
         newResult[key] = obj[key];
@@ -20,19 +20,19 @@ export const publishToGoogleSheet = async (
     const flattenedData = flattenObject(data);
     const orderedData: Record<string, any> = {
       sheetName: stateName,
-      phoneNumber: flattenedData.phoneNumber || '',
-      surveyAnswers: flattenedData.surveyAnswers || '',
-      dinnerPreferences: flattenedData.dinnerPreferences || '',
-      token: flattenedData.token || '',
+      phoneNumber: flattenedData.phoneNumber || "",
+      surveyAnswers: flattenedData.surveyAnswers || "",
+      dinnerPreferences: flattenedData.dinnerPreferences || "",
+      token: flattenedData.token || "",
     };
 
     const queryParams = new URLSearchParams(
       Object.entries(orderedData).map(([key, value]) => [
         key,
-        typeof value === 'object' ? JSON.stringify(value) : String(value),
+        typeof value === "object" ? JSON.stringify(value) : String(value),
       ]),
     ).toString();
-    console.log('Publishing data to Google Sheets:', queryParams);
+    console.log("Publishing data to Google Sheets:", queryParams);
 
     // Send a GET request with the query parameters
     const response = await fetch(
@@ -41,14 +41,14 @@ export const publishToGoogleSheet = async (
 
     if (response.ok) {
       const result = await response.json();
-      console.log('Data successfully published to Google Sheets:', result);
+      console.log("Data successfully published to Google Sheets:", result);
     } else {
       console.error(
-        'Failed to publish data to Google Sheets:',
+        "Failed to publish data to Google Sheets:",
         await response.text(),
       );
     }
   } catch (error) {
-    console.error('Error publishing data to Google Sheets:', error);
+    console.error("Error publishing data to Google Sheets:", error);
   }
 };

@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-import { getNextWednesdaysAsStrings } from '@/utils/date';
+import { getNextWednesdaysAsStrings } from "@/utils/date";
 
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from "../context/AuthContext";
 
 export default function BookingPage() {
   const { token } = useAuth();
@@ -23,7 +23,7 @@ export default function BookingPage() {
   }, [token, router]);
 
   const formatDateDisplay = (dateString: string) => {
-    const [weekday, monthDay, time] = dateString.split(', ');
+    const [weekday, monthDay, time] = dateString.split(", ");
     return { date: `${weekday}, ${monthDay}`, time };
   };
 
@@ -54,8 +54,8 @@ export default function BookingPage() {
                 key={index}
                 className={`flex items-center justify-between rounded-xl border p-4 ${
                   selectedDate === dateString
-                    ? 'border-black bg-gray-50'
-                    : 'border-gray-200 hover:border-gray-400'
+                    ? "border-black bg-gray-50"
+                    : "border-gray-200 hover:border-gray-400"
                 } cursor-pointer transition-all`}
               >
                 <div>
@@ -81,7 +81,7 @@ export default function BookingPage() {
             className="w-full rounded-full bg-orange-500 py-4 text-white transition-colors hover:bg-gray-800 disabled:cursor-not-allowed disabled:bg-gray-400"
             disabled={!selectedDate}
             onClick={() => {
-              router.push('/dinnerPreferences');
+              router.push("/dinnerPreferences");
             }}
           >
             Забронировать место

@@ -1,7 +1,7 @@
-import Document, { Head, Html, Main, NextScript } from 'next/document';
-import Script from 'next/script';
+import Document, { Head, Html, Main, NextScript } from "next/document";
+import Script from "next/script";
 
-import { AppConfig } from '../utils/AppConfig';
+import { AppConfig } from "../utils/AppConfig";
 
 class MyDocument extends Document {
   // eslint-disable-next-line class-methods-use-this

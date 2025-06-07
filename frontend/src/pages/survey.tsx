@@ -1,27 +1,27 @@
-'use client';
+"use client";
 
-import 'survey-core/survey-core.css';
-import 'survey-core/survey.i18n';
+import "survey-core/survey-core.css";
+import "survey-core/survey.i18n";
 
-import { useRouter } from 'next/router';
-import { ThreeDimensionalLight } from 'survey-core/themes';
-import { Model, Survey } from 'survey-react-ui';
+import { useRouter } from "next/router";
+import { ThreeDimensionalLight } from "survey-core/themes";
+import { Model, Survey } from "survey-react-ui";
 
-import { useFormContext } from '@/context/FormContext';
+import { useFormContext } from "@/context/FormContext";
 
 const surveyJson = {
   showProgressBar: true,
-  progressBarType: 'pages',
+  progressBarType: "pages",
   progressBarShowPageNumbers: true,
   autoAdvanceEnabled: true,
-  locale: 'ru',
+  locale: "ru",
   pages: [
     {
       elements: [
         {
-          name: 'fullName',
-          title: 'Введите ваше имя и фамилию:',
-          type: 'text',
+          name: "fullName",
+          title: "Введите ваше имя и фамилию:",
+          type: "text",
           isRequired: true,
         },
       ],
@@ -408,7 +408,7 @@ export default function SurveyComponent() {
 
   survey.onComplete.add((result) => {
     setFormData((prev) => ({ ...prev, surveyAnswers: result.data }));
-    router.push('/signup');
+    router.push("/signup");
   });
 
   // User can access survey without a token, but will be redirected to signup page after completion

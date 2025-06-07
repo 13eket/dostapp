@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { handleBookingEmbedded } from '@/utils/routing';
+import { handleBookingEmbedded } from "@/utils/routing";
 
-import { Background } from '../background/Background';
-import { Section } from '../layout/Section';
-import Countdown from './Countdown';
+import { Background } from "../background/Background";
+import { Section } from "../layout/Section";
+import Countdown from "./Countdown";
 
 const Hero = () => {
-  const [city, setCity] = useState('Алматы'); // Default to Алматы
+  const [city, setCity] = useState("Алматы"); // Default to Алматы
 
   useEffect(() => {
-    const fetchCity = async (latitude: any, longitude: any) => {
+    const fetchCity = async (latitude: number, longitude: number) => {
       try {
         const response = await fetch(
           `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=ru`,
@@ -20,7 +20,7 @@ const Hero = () => {
           setCity(data.address.city);
         }
       } catch (error) {
-        console.error('Ошибка получения города:', error);
+        console.error("Ошибка получения города:", error);
       }
     };
 
@@ -30,7 +30,7 @@ const Hero = () => {
           fetchCity(position.coords.latitude, position.coords.longitude);
         },
         (error) => {
-          console.error('Ошибка определения местоположения:', error);
+          console.error("Ошибка определения местоположения:", error);
         },
       );
     }
@@ -43,13 +43,13 @@ const Hero = () => {
           <div className="mb-4 self-center">
             <div
               className="flex items-center rounded-full border border-black px-3 py-1"
-              style={{ margin: '5px' }}
+              style={{ margin: "5px" }}
             >
               <span
                 role="img"
                 aria-label="Location Pin"
                 className="mr-1 text-xl"
-                style={{ lineHeight: '1' }}
+                style={{ lineHeight: "1" }}
               >
                 📍
               </span>
@@ -67,7 +67,7 @@ const Hero = () => {
               <br />С КОТОРОГО НАЧИНАЕТСЯ ДРУЖБА.
             </h1>
             <p className="mb-8 font-body text-base">
-              Забронируйте место сейчас и{' '}
+              Забронируйте место сейчас и{" "}
               <span className="font-bold">
                 проведите вечер в живом общении с людьми
               </span>

@@ -1,14 +1,16 @@
-.sd-btn, .sd-element, .sd-page {
+.sd-btn,
+.sd-element,
+.sd-page {
   background-color: #fef1de !important;
   color: #000000 !important;
-  font-family: 'AliasBoldItalic';
+  font-family: "AliasBoldItalic";
 }
 
 .sd-rating__item {
-  background-color: #EB5D40 !important;
+  background-color: #eb5d40 !important;
 }
 
 .sd-title {
-  font-family: 'AliasBoldItalic' !important;
+  font-family: "AliasBoldItalic" !important;
   line-height: 3 !important;
 }

@@ -1,31 +1,31 @@
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-import { useFormContext } from '@/context/FormContext';
-import { publishToGoogleSheet } from '@/utils/googleSheetUtility';
+import { useFormContext } from "@/context/FormContext";
+import { publishToGoogleSheet } from "@/utils/googleSheetUtility";
 
-import ProtectedRoute from '@/component/ProtectedRoute';
+import ProtectedRoute from "@/component/ProtectedRoute";
 
 const DinnerPreferences = () => {
   const { formData, setFormData } = useFormContext();
   const [selectedSpending, setSelectedSpending] = useState(
-    formData.dinnerPreferences?.spending || '',
+    formData.dinnerPreferences?.spending || "",
   );
   const [selectedMenuOptions, setSelectedMenuOptions] = useState<string[]>(
     formData.dinnerPreferences?.menuOptions || [],
   );
   const router = useRouter();
 
-  const spendingOptions = ['$', '$$', '$$$'];
+  const spendingOptions = ["$", "$$", "$$$"];
   const menuOptions = [
-    'Я ем всё',
-    'Вегетарианское',
-    'Мясное',
-    'Рыбное',
-    'Веганское',
-    'Халяль',
-    'Кошерное',
-    'Без глютена',
+    "Я ем всё",
+    "Вегетарианское",
+    "Мясное",
+    "Рыбное",
+    "Веганское",
+    "Халяль",
+    "Кошерное",
+    "Без глютена",
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -38,8 +38,8 @@ const DinnerPreferences = () => {
       },
     };
     setFormData(updatedFormData);
-    publishToGoogleSheet(updatedFormData, 'DinnerPreferences');
-    router.push('/payment');
+    publishToGoogleSheet(updatedFormData, "DinnerPreferences");
+    router.push("/payment");
   };
 
   const handleMenuSelect = (option: string) => {
@@ -57,12 +57,12 @@ const DinnerPreferences = () => {
       <div className="flex min-h-screen flex-col bg-[#FDF1DE]">
         {/* "Your Dinner" Header with Separator */}
         <div className="w-full pt-4">
-          {' '}
+          {" "}
           {/* Reduced top padding */}
           <div className="text-center">
             <h1 className="font-dinner text-sm font-bold italic">ВАШ УЖИН</h1>
           </div>
-          <div className="my-4 border-t border-black"></div>{' '}
+          <div className="my-4 border-t border-black"></div>{" "}
         </div>
 
         <div className="ml-2.5">
@@ -126,8 +126,8 @@ const DinnerPreferences = () => {
             disabled={!isFormValid}
             className={`mx-auto block w-full max-w-[360px] rounded-xl py-4 text-lg font-semibold text-white transition-colors ${
               isFormValid
-                ? 'bg-orange-500 hover:bg-orange-600'
-                : 'cursor-not-allowed bg-gray-300'
+                ? "bg-orange-500 hover:bg-orange-600"
+                : "cursor-not-allowed bg-gray-300"
             }`}
           >
             Подтвердить

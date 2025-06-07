@@ -1,6 +1,6 @@
 export const formatPhoneNumber = (value: string) => {
-  const numbers = value.replace(/\D/g, '');
-  let formatted = '';
+  const numbers = value.replace(/\D/g, "");
+  let formatted = "";
 
   if (numbers.length > 0) {
     formatted += numbers.substring(0, 3);

@@ -1,14 +1,14 @@
-import Link from 'next/link';
-import React, { useEffect } from 'react';
+import Link from "next/link";
+import React, { useEffect } from "react";
 
-import { Footer } from '@/component/Footer';
+import { Footer } from "@/component/Footer";
 
-const COMPANY_EMAIL = 'bravomediagroup13@gmail.com';
-const COMPANY_PHONE_RAW = '+7 (706) 639-50-62';
-const COMPANY_PHONE_LINK = '77066395062';
-const PUBLIC_OFFER_URL = 'https://dostapp.org/public-offer';
+const COMPANY_EMAIL = "bravomediagroup13@gmail.com";
+const COMPANY_PHONE_RAW = "+7 (706) 639-50-62";
+const COMPANY_PHONE_LINK = "77066395062";
+const PUBLIC_OFFER_URL = "https://dostapp.org/public-offer";
 const COMPANY_NAME = 'ИП "Dostapp"';
-const JURIDICAL_ADDRESS = 'г. Атырау, ул. Жарбосынова 71';
+const JURIDICAL_ADDRESS = "г. Атырау, ул. Жарбосынова 71";
 
 interface NavLinkProps {
   href: string;
@@ -24,10 +24,10 @@ const NavLinkComponent: React.FC<NavLinkProps> = ({
   isExternal = false,
 }) => {
   const primaryClasses =
-    'text-blue-600 hover:text-blue-700 border border-blue-600';
-  const defaultClasses = 'text-gray-600 hover:text-blue-600';
+    "text-blue-600 hover:text-blue-700 border border-blue-600";
+  const defaultClasses = "text-gray-600 hover:text-blue-600";
   const commonClasses =
-    'px-3 py-2 rounded-md text-sm font-medium transition-colors';
+    "px-3 py-2 rounded-md text-sm font-medium transition-colors";
 
   if (isExternal) {
     return (
@@ -55,12 +55,12 @@ const NavLinkComponent: React.FC<NavLinkProps> = ({
 
 const ContactUs: React.FC = () => {
   useEffect(() => {
-    document.documentElement.lang = 'ru';
+    document.documentElement.lang = "ru";
   }, []);
 
   return (
     <div className="font-inter flex min-h-screen flex-col bg-gray-100 text-gray-800">
-      {' '}
+      {" "}
       <header className="sticky top-0 z-50 bg-white shadow-md">
         <nav className="container mx-auto p-4 sm:px-6">
           <div className="flex items-center justify-between">

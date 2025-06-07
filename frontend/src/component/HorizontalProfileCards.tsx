@@ -1,5 +1,5 @@
-import ProfileCard from '../feature/ProfileCard';
-import { Section } from '../layout/Section';
+import ProfileCard from "../feature/ProfileCard";
+import { Section } from "../layout/Section";
 
 const HorizontalProfileCards = () => {
   return (

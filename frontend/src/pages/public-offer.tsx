@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react";
 
-const COMPANY_EMAIL = 'bravomediagroup13@gmail.com';
-const COMPANY_PHONE = '+7 (706) 639-50-62 (Whatsapp)';
-const PUBLIC_OFFER_URL = 'https://dostapp.org/public-offer';
+const COMPANY_EMAIL = "bravomediagroup13@gmail.com";
+const COMPANY_PHONE = "+7 (706) 639-50-62 (Whatsapp)";
+const PUBLIC_OFFER_URL = "https://dostapp.org/public-offer";
 const COMAPANY_NAME = 'ИП "Dostapp"';
-const JURIDICAL_ADDRESS = 'г. Атырау, ул. Жарбосынова 71';
-const IIN = 'ИИН 601013401122';
-const EVENT_CANCELTIME = 'за 48 часа до начала мероприятия';
+const JURIDICAL_ADDRESS = "г. Атырау, ул. Жарбосынова 71";
+const IIN = "ИИН 601013401122";
+const EVENT_CANCELTIME = "за 48 часа до начала мероприятия";
 
 const PublicOffer = () => (
   <div className="container mx-auto p-6 font-sans text-gray-800">
@@ -371,7 +371,7 @@ const PublicOffer = () => (
         Пользователи могут обращаться по следующим контактным данным:
       </p>
       <p className="mb-1">
-        Электронная почта:{' '}
+        Электронная почта:{" "}
         <a
           href={`mailto:${COMPANY_EMAIL}`}
           className="text-blue-600 hover:underline"

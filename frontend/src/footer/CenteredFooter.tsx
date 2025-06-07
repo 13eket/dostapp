@@ -1,8 +1,9 @@
-import Link from 'next/link';
-import type { ReactNode } from 'react';
+import Link from "next/link";
+import type { ReactNode } from "react";
 
-import { FooterCopyright } from './FooterCopyright';
-import { FooterIconList } from './FooterIconList';
+import { FooterCopyright } from "./FooterCopyright";
+import { FooterIconList } from "./FooterIconList";
+import Image from "next/image";
 
 type ICenteredFooterProps = {
   logo: ReactNode;
@@ -26,7 +27,7 @@ const CenteredFooter = (props: ICenteredFooterProps) => (
 
     <div className="mt-8 flex items-center justify-center space-x-4 text-sm">
       <FooterCopyright />
-      <img
+      <Image
         src="https://dostapp.s3.eu-north-1.amazonaws.com/visa-mastercard.png"
         alt="VisaMastercard"
         className="h-16"
