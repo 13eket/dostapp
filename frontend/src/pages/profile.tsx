@@ -19,11 +19,9 @@ export default function ProfilePage() {
         }
         try {
           const response = await fetch(`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}/profile`, {
-              
             
             
           
-            
             headers: {
                   Authorization: `Bearer ${token}`,
               },
