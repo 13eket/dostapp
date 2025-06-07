@@ -16,6 +16,9 @@ module.exports = withBundleAnalyzer({
   basePath: "",
   reactStrictMode: true,
   images: {
-    domains: ["dostapp.s3.eu-north-1.amazonaws.com"],
+    domains: [
+      "dostapp.s3.eu-north-1.amazonaws.com",
+      "lh3.googleusercontent.com",
+    ],
   },
 });

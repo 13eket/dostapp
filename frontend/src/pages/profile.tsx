@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import ProtectedRoute from "../component/ProtectedRoute";
-import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
+import { useAuth } from "../context/AuthContext";
 
 interface Profile {
   name: string;
@@ -15,18 +15,17 @@ interface Profile {
 }
 
 export default function ProfilePage() {
-  const { token } = useAuth();
+  const { token, loading } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    // Only fetch if we have a token and loading is complete
+    if (!token || loading) {
+      return;
+    }
+
     const fetchProfile = async () => {
-      if (!token) {
-        setError("No token found.");
-        setLoading(false);
-        return;
-      }
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_GATEWAY_URL}/profile`,
@@ -34,7 +33,7 @@ export default function ProfilePage() {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
 
         if (!response.ok) {
@@ -46,19 +45,16 @@ export default function ProfilePage() {
         }
       } catch (err) {
         setError("Something went wrong.");
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchProfile();
-  }, [token]);
+  }, [token, loading]);
 
   return (
     <ProtectedRoute>
       <div className="p-4">
         <h1 className="text-xl font-bold mb-4">Profile Page</h1>
-        {loading && <p>Loading...</p>}
         {error && <p className="text-red-500">{error}</p>}
         {profile && (
           <div className="space-y-2">

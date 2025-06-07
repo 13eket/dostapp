@@ -7,13 +7,15 @@ import { useFormContext } from "@/context/FormContext";
 import { formatPhoneNumber } from "@/utils/numberFormats";
 
 import ProtectedRoute from "../component/ProtectedRoute";
+import { useAuth } from "@/context/AuthContext";
 
 const PhoneNumber = () => {
+  const { token } = useAuth();
   const { formData, setFormData } = useFormContext();
   const [phoneNumber, setPhoneNumber] = useState("");
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const fullPhoneNumber = `+7${phoneNumber}`;
@@ -22,7 +24,27 @@ const PhoneNumber = () => {
       phoneNumber: fullPhoneNumber,
     };
     setFormData(updatedFormData);
-    router.push("/dinnerPreferences");
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_GATEWAY_URL}/api/users/me`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(updatedFormData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to save phone number");
+      }
+
+      router.push("/dinnerPreferences");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const isPhoneComplete = phoneNumber.length >= 10;

@@ -5,41 +5,20 @@ import requests
 import uuid
 from datetime import datetime
 import xml.etree.ElementTree as ET
-from fastapi import FastAPI, Header, HTTPException, Request
+from fastapi import Depends, FastAPI, Header, HTTPException, Request, logger
 from fastapi.responses import PlainTextResponse, JSONResponse
 from mangum import Mangum
 from pydantic import BaseModel, Field
 from typing import Optional, Dict, Any
-from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
+
+from core.auth import (
+    GoogleOnboardRequest, UserUpdateRequest, create_access_token_and_link_to_user, get_next_step, get_or_create_user, get_user_by_email, get_user_from_jwt, update_user
+)
+from core.config import DOSTAPP_DOMAIN, FREEDOMPAY_MERCHANT_ID, FREEDOMPAY_SECRET_KEY, FREEDOMPAY_API_URL
 
 app = FastAPI()
 handler = Mangum(app)
-
-# Load environment variables
-load_dotenv()
-
-# Configuration
-merchant_id = os.environ['FREEDOMPAY_MERCHANT_ID']
-secret_key = os.environ['FREEDOMPAY_SECRET_KEY']
-api_url = os.environ.get('FREEDOMPAY_API_URL', 'https://secure.freedompay.kz/payment.php')
-merchant_domain = os.environ['MERCHANT_DOMAIN']
-
-# In-memory "database"
-users = {
-    "user@example.com": {
-        "google_token": "...",
-        "survey": {...},
-        "phone_number": "...",
-        "dinner_preferences": {...},
-        "email": "user@example.com"
-    },
-    # more users...
-}
-
-token_to_user = {
-    "google_token": "user@example.com",
-}
 
 # Pydantic Models
 class PaymentRequest(BaseModel):
@@ -88,13 +67,6 @@ class PaymentConfig:
             raise ValueError(f"Invalid payment_type: {payment_type}")
         return self.config[payment_type]
 
-class GoogleOnboardRequest(BaseModel):
-    google_token: str
-    survey_answers: Optional[Dict[str, Any]] = None
-    phone_number: Optional[str] = None
-    dinner_preferences: Optional[Dict[str, Any]] = None
-    has_paid: Optional[bool] = False
-
 def generate_signature(params: dict, secret_key: str) -> str:
     """Generate FreedomPay signature for request authentication."""
     signature_parts = ['init_payment.php']
@@ -111,7 +83,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
-        merchant_domain
+        DOSTAPP_DOMAIN
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -136,47 +108,31 @@ async def google_onboard(data: GoogleOnboardRequest):
             raise HTTPException(status_code=401, detail="Invalid Google token")
         google_user = google_response.json()
         email = google_user["email"]
+
         # Get or create user record
-        user = users.get(email, {})
-        user["email"] = email
-        user["name"] = google_user.get("name")
-        user["picture"] = google_user.get("picture")
-        user["google_token"] = data.google_token
-        user["survey_answers"] = data.survey_answers or user.get("survey_answers")
-        user["phone_number"] = data.phone_number or user.get("phone_number")
-        user["dinner_preferences"] = data.dinner_preferences or user.get("dinner_preferences")
-        user["has_paid"] = data.has_paid or user.get("has_paid", False)
-        user["created_at"] = user.get("created_at") or datetime.now().isoformat()
-        users[email] = user
+        user = get_or_create_user(email, google_user, data)
+
         # Check for missing fields
         # Find any missing required fields in user profile
-        missing_fields = [
-            field 
-            for field in REQUIRED_FIELDS 
-            if not user.get(field)
-        ]
-        
-        if missing_fields:
-            next_step = missing_fields[0]
-        elif not user.get("has_paid", False):
-            next_step = "payment"
-        else:
-            next_step = "cabinet"
+        next_step = get_next_step(user)
 
         # Generate a simple JWT TODO: (in production, use a proper JWT library)
-        jwt_payload = {
-            "email": email,
-            "exp": int(datetime.now().timestamp()) + (0.1 * 60 * 60)
-        }
-        jwt_token = hashlib.md5(json.dumps(jwt_payload).encode()).hexdigest()
-
-        token_to_user[jwt_token] = email
+        jwt_token = create_access_token_and_link_to_user(email)
+        
         return JSONResponse({
             "jwt": jwt_token,
             "next_step": next_step
         })
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@app.patch("/api/users/me")
+async def update_user_profile(data: UserUpdateRequest, current_user: dict = Depends(get_user_from_jwt)):
+    """Handles partial updates for the logged-in user."""
+    email = current_user["email"]
+    update_data = data.model_dump(exclude_unset=True)
+    updated_user = update_user(email, update_data)
+    return {"message": "Profile updated successfully", "updated_fields": list(update_data.keys())}
 
 @app.post("/init-payment")
 async def init_payment(request: Request):
@@ -189,21 +145,21 @@ async def init_payment(request: Request):
         payment_type = body.get('payment_type') 
         payment_config = PaymentConfig()
         config = payment_config.get_config(payment_type)
-        
+
         # Generate order ID
         order_id = f"ORD-{datetime.now().strftime('%Y%m%d')}-{str(uuid.uuid4())[:8]}"
-        
+
         # Prepare request parameters
         params = {
-            'pg_merchant_id': merchant_id,
+            'pg_merchant_id': FREEDOMPAY_MERCHANT_ID,
             'pg_order_id': order_id,
             'pg_amount': config['amount'],
             'pg_currency': 'KZT',
             'pg_description': config['description'],
             'pg_salt': hashlib.md5(os.urandom(32)).hexdigest(),
-            'pg_result_url': f"https://{merchant_domain}/api/payment-callback",
-            'pg_success_url': f"https://{merchant_domain}/payment-success",
-            'pg_failure_url': f"https://{merchant_domain}/payment-failed",
+            'pg_result_url': f"https://{DOSTAPP_DOMAIN}/api/payment-callback",
+            'pg_success_url': f"https://{DOSTAPP_DOMAIN}/payment-success",
+            'pg_failure_url': f"https://{DOSTAPP_DOMAIN}/payment-failed",
             'pg_testing_mode': '1',
             'pg_auto_clearing': '1',
             'pg_user_id': hashlib.md5(os.urandom(32)).hexdigest()
@@ -215,10 +171,10 @@ async def init_payment(request: Request):
             params['pg_recurring_lifetime'] = config['recurring_lifetime']
         
         # Generate signature
-        params['pg_sig'] = generate_signature(params, secret_key)
+        params['pg_sig'] = generate_signature(params, FREEDOMPAY_SECRET_KEY)
         
         # Make API request to FreedomPay
-        response = requests.post(api_url, data=params)
+        response = requests.post(FREEDOMPAY_API_URL, data=params)
         response.raise_for_status()
 
         # Parse XML to get the redirect URL
@@ -247,7 +203,7 @@ async def get_profile(authorization: str = Header(...)):
     try:
         if not authorization.startswith("Bearer "):
             raise HTTPException(status_code=401, detail="Invalid token format")
-        
+
         token = authorization.split(" ")[1]
         if not token:
             raise HTTPException(status_code=401, detail="Token is required")
