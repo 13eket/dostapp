@@ -11,35 +11,34 @@ export default function ProfilePage() {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        const fetchProfile = async () => {
-            if (!token) {
-                setError('No token found.');
-                setLoading(false);
-                return;
-            }
+      const fetchProfile = async () => {
+        if (!token) {
+          setError('No token found.');
+          setLoading(false);
+          return;
+        }
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}/profile`, {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+              },
+          });
 
-            try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}/profile`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+          if (!response.ok) {
+              const errorData = await response.json();
+              setError(errorData.detail || 'Failed to fetch profile.');
+          } else {
+              const data = await response.json();
+              setProfile(data);
+          }
+        } catch (err) {
+            setError('Something went wrong.');
+        } finally {
+            setLoading(false);
+        }
+      };
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    setError(errorData.detail || 'Failed to fetch profile.');
-                } else {
-                    const data = await response.json();
-                    setProfile(data);
-                }
-            } catch (err) {
-                setError('Something went wrong.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchProfile();
+      fetchProfile();
     }, [token]);
 
     return (
