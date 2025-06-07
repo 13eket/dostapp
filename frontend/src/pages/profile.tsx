@@ -22,7 +22,7 @@ export default function ProfilePage() {
               
             
             
-            
+          
             
             headers: {
                   Authorization: `Bearer ${token}`,
