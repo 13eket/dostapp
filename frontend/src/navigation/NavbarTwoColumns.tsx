@@ -38,6 +38,8 @@ const Navbar = () => {
                 src="/assets/images/instagram-logo.png"
                 alt="Instagram Logo"
                 className="size-5"
+                width={20}
+                height={20}
               />
             </Link>
           </li>

@@ -5,9 +5,18 @@ import ProtectedRoute from "../component/ProtectedRoute";
 import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
 
+interface Profile {
+  name: string;
+  email: string;
+  picture?: string;
+  phone_number?: string;
+  survey_answers?: any;
+  dinner_preferences?: any;
+}
+
 export default function ProfilePage() {
   const { token } = useAuth();
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -64,6 +73,8 @@ export default function ProfilePage() {
                 src={profile.picture}
                 alt="Profile"
                 className="w-24 h-24 rounded-full"
+                width={96}
+                height={96}
               />
             )}
             <p>

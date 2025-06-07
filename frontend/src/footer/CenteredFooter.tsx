@@ -31,6 +31,8 @@ const CenteredFooter = (props: ICenteredFooterProps) => (
         src="https://dostapp.s3.eu-north-1.amazonaws.com/visa-mastercard.png"
         alt="VisaMastercard"
         className="h-16"
+        width={100}
+        height={100}
       />
     </div>
 
