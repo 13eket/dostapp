@@ -16,7 +16,7 @@ declare global {
             longtitle: boolean;
             theme: string;
             onsuccess: (googleUser: unknown) => void;
-          },
+          }
         ) => void;
       };
     };
