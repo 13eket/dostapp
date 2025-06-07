@@ -27,7 +27,8 @@ export default function ProfilePage() {
               },
           });
 
-          if (!response.ok) {
+          if (!response.ok) 
+            {
               const errorData = await response.json();
               setError(errorData.detail || 'Failed to fetch profile.');
           } else {
