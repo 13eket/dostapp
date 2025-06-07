@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Footer } from '@/component/Footer';
 
 import { getNextWednesdaysAsStrings } from '../utils/date';
+import ProtectedRoute from '@/component/ProtectedRoute';
 
 const HEADER_CONTENT = {
   subscription: {
@@ -214,74 +215,76 @@ const PaymentsPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#FDF1DE]">
-      <TopImageSection isTicket={selectedTab === 'ticket'} />
-      <div className="mx-auto max-w-[600px] p-0 font-sans">
-        <PaymentOptionTabs
-          selectedTab={selectedTab}
-          onTabChange={handleTabChange}
-        />
-
-        {selectedTab === 'subscription' ? (
-          <div className="mt-5 flex justify-between">
-            <SubscriptionCard
-              type="1 Месяц"
-              price="7,000 ₸/мес"
-              save="Базовый"
-              isSelected={selectedCard === '1 Month'}
-              onClick={() => handleCardClick('1 Month')}
-            />
-            <SubscriptionCard
-              type="3 Месяца"
-              price="5,600 ₸/мес"
-              save="Сэкономьте 20%"
-              isSelected={selectedCard === '3 Months'}
-              onClick={() => handleCardClick('3 Months')}
-            />
-            <SubscriptionCard
-              type="6 Месяцев"
-              price="4,200 ₸/мес"
-              save="Сэкономьте 40%"
-              isSelected={selectedCard === '6 Months'}
-              onClick={() => handleCardClick('6 Months')}
-            />
-          </div>
-        ) : (
-          <TicketDetailsCard
-            date={ticketDate}
-            city={ticketCity}
-            price="5,000 ₸"
-            onDateChange={handleDateChange}
-            onCityChange={handleCityChange}
+    <ProtectedRoute>
+      <div className="flex min-h-screen flex-col bg-[#FDF1DE]">
+        <TopImageSection isTicket={selectedTab === 'ticket'} />
+        <div className="mx-auto max-w-[600px] p-0 font-sans">
+          <PaymentOptionTabs
+            selectedTab={selectedTab}
+            onTabChange={handleTabChange}
           />
-        )}
 
-        {selectedTab === 'subscription' ? (
-          <>
-            {Object.entries(paymentTypeMap).map(
-              ([key, { label, payload }]) =>
-                selectedCard === key && (
-                  <button
-                    key={key}
-                    onClick={() => handlePaymentRedirect(payload)}
-                    className="mt-5 w-full rounded-xl border-none bg-[#F64100] px-5 py-3 font-bold text-white transition-colors hover:bg-[#E53900]"
-                  >
-                    {label}
-                  </button>
-                ),
-            )}
-          </>
-        ) : (
-          <button
-            onClick={() => handlePaymentRedirect('one-time')}
-            className="mt-5 w-full rounded-xl border-none bg-[#F64100] px-5 py-3 font-bold text-white transition-colors hover:bg-[#E53900]"
-          >
-            Разовый билет за 5,000 ₸
-          </button>
-        )}
+          {selectedTab === 'subscription' ? (
+            <div className="mt-5 flex justify-between">
+              <SubscriptionCard
+                type="1 Месяц"
+                price="7,000 ₸/мес"
+                save="Базовый"
+                isSelected={selectedCard === '1 Month'}
+                onClick={() => handleCardClick('1 Month')}
+              />
+              <SubscriptionCard
+                type="3 Месяца"
+                price="5,600 ₸/мес"
+                save="Сэкономьте 20%"
+                isSelected={selectedCard === '3 Months'}
+                onClick={() => handleCardClick('3 Months')}
+              />
+              <SubscriptionCard
+                type="6 Месяцев"
+                price="4,200 ₸/мес"
+                save="Сэкономьте 40%"
+                isSelected={selectedCard === '6 Months'}
+                onClick={() => handleCardClick('6 Months')}
+              />
+            </div>
+          ) : (
+            <TicketDetailsCard
+              date={ticketDate}
+              city={ticketCity}
+              price="5,000 ₸"
+              onDateChange={handleDateChange}
+              onCityChange={handleCityChange}
+            />
+          )}
+
+          {selectedTab === 'subscription' ? (
+            <>
+              {Object.entries(paymentTypeMap).map(
+                ([key, { label, payload }]) =>
+                  selectedCard === key && (
+                    <button
+                      key={key}
+                      onClick={() => handlePaymentRedirect(payload)}
+                      className="mt-5 w-full rounded-xl border-none bg-[#F64100] px-5 py-3 font-bold text-white transition-colors hover:bg-[#E53900]"
+                    >
+                      {label}
+                    </button>
+                  ),
+              )}
+            </>
+          ) : (
+            <button
+              onClick={() => handlePaymentRedirect('one-time')}
+              className="mt-5 w-full rounded-xl border-none bg-[#F64100] px-5 py-3 font-bold text-white transition-colors hover:bg-[#E53900]"
+            >
+              Разовый билет за 5,000 ₸
+            </button>
+          )}
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </ProtectedRoute>
   );
 };
 

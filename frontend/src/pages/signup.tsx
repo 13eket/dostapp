@@ -3,14 +3,14 @@
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import { useFormContext } from '@/context/FormContext';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { toSnakeCaseDeep } from '@/utils/api';
 import assert from 'assert';
 
 function SignInButton() {
   const router = useRouter();
-  const { setToken, token } = useAuth();
+  const { setToken } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const { formData } = useFormContext();
 
@@ -36,7 +36,7 @@ function SignInButton() {
 
         assert(data.jwt, 'Backend did not provide JWT token');
         assert(data.next_step != null && data.next_step != undefined, 'Backend did not provide next step');
-        
+
         setToken(data.jwt);
 
         switch (data.next_step) {
